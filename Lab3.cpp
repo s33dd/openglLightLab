@@ -276,21 +276,21 @@ void DrawCube() {
             glScalef(5.0f, 5.0f, 5.0f);
 
             glNormal3f(0, 0, 1);
-            glColor3f(2/255.0f, 18/255.0f, 232/255.0f);
+            glColor3f(51 / 255.0f, 171 / 255.0f, 171 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, firstEdge);
 
-            glColor3f(13 / 255.0f, 231 / 255.0f, 247 / 255.0f);
+            glColor3f(229 / 255.0f, 255 / 255.0f, 0 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, secondEdge);
 
             glNormal3f(1, 0, 0);
             glColor3f(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, thirdEdge);
 
-            glColor3f(229 / 255.0f, 255 / 255.0f, 0 / 255.0f);
+            glColor3f(13 / 255.0f, 231 / 255.0f, 247 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fourthEdge);
 
             glNormal3f(0, 1, 0);
-            glColor3f(51 / 255.0f, 171 / 255.0f, 171 / 255.0f);
+            glColor3f(2 / 255.0f, 18 / 255.0f, 232 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fifthEdge);
 
             glColor3f(0 / 255.0f, 255 / 255.0f, 137 / 255.0f);
