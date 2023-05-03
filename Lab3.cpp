@@ -140,9 +140,72 @@ std::vector<int> MoveCamera(GLFWwindow* window, int &rho, int &theta, int &phi) 
     //std::cout << "x:" << xPos << " y:" << yPos << " z:" << zPos << std::endl;
 }
 
+void DrawCube() {
+    float vertices[] = {
+    0.0f, 0.0f, 0.0f, //0
+    0.0f, 1.0f, 0.0f, //1
+    1.0f, 1.0f, 0.0f, //2
+    1.0f, 0.0f, 0.0f, //3
+    0.0f, 0.0f, 1.0f, //4
+    0.0f, 1.0f, 1.0f, //5
+    1.0f, 1.0f, 1.0f, //6
+    1.0f, 0.0f, 1.0f  //7
+    };
+    GLuint firstEdge[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    GLuint secondEdge[] = {
+        4, 5, 6,
+        6, 7, 4
+    };
+    GLuint thirdEdge[] = {
+        7, 6, 2,
+        7, 2, 3
+    };
+    GLuint fourthEdge[] = {
+        0, 1, 5,
+        5, 4, 0
+    };
+    GLuint fifthEdge[] = {
+        1, 2, 6,
+        6, 5, 1
+    };
+    GLuint sixthEdge[] = {
+        0, 3, 7,
+        7, 4, 0
+    };
+
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glEnableClientState(GL_VERTEX_ARRAY);
+        glPushMatrix();
+            glTranslatef(5.0f, 5.0f, 0);
+            glScalef(5.0f, 5.0f, 5.0f);
+
+            glColor3f(2/255.0f, 18/255.0f, 232/255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, firstEdge);
+
+            glColor3f(13 / 255.0f, 231 / 255.0f, 247 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, secondEdge);
+
+            glColor3f(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, thirdEdge);
+
+            glColor3f(229 / 255.0f, 255 / 255.0f, 0 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fourthEdge);
+
+            glColor3f(51 / 255.0f, 171 / 255.0f, 171 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fifthEdge);
+
+            glColor3f(0 / 255.0f, 255 / 255.0f, 137 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, sixthEdge);
+        glPopMatrix();
+    glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 int main(void) {
 
-    int rho = 33, theta = 10, phi = 51;
+    int rho = 28, theta = 36, phi = 64;
 	std::vector<int> coords;
 
     glfwInit();
@@ -180,6 +243,7 @@ int main(void) {
             coords = MoveCamera(window, rho, theta, phi);
             DrawFloor();
             DrawAxises();
+            DrawCube();
         glPopMatrix();
 
         ImGui::Begin("Menu");
