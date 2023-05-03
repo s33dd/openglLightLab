@@ -37,6 +37,7 @@ void DrawFloor() {
     };
 
     glVertexPointer(3, GL_FLOAT, 0, &vertices);
+    glNormal3f(0, 0, 1);
     glEnableClientState(GL_VERTEX_ARRAY);
     for (int i = MIN_POS / 2; i < MAX_POS / 2; i++) {
         for (int j = MIN_POS / 2; j < MAX_POS / 2; j++) {
@@ -99,7 +100,7 @@ void DrawAxises() {
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-std::vector<int> MoveCamera(GLFWwindow* window, int &rho, int &theta, int &phi) {
+std::vector<int> MoveCamera(int &rho, int &theta, int &phi) {
     //Min and max values;
     int phiMax = 90;
     int phiMin = 0;
@@ -140,6 +141,99 @@ std::vector<int> MoveCamera(GLFWwindow* window, int &rho, int &theta, int &phi) 
     //std::cout << "x:" << xPos << " y:" << yPos << " z:" << zPos << std::endl;
 }
 
+void DrawLight() {
+    glDisable(GL_LIGHTING);
+    float vertices[] = {
+        0.0f, 0.0f, 0.0f, //0
+        0.0f, 1.0f, 0.0f, //1
+        1.0f, 1.0f, 0.0f, //2
+        1.0f, 0.0f, 0.0f, //3
+        0.0f, 0.0f, 1.0f, //4
+        0.0f, 1.0f, 1.0f, //5
+        1.0f, 1.0f, 1.0f, //6
+        1.0f, 0.0f, 1.0f  //7
+    };
+    GLuint firstEdge[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    GLuint secondEdge[] = {
+        4, 5, 6,
+        6, 7, 4
+    };
+    GLuint thirdEdge[] = {
+        7, 6, 2,
+        7, 2, 3
+    };
+    GLuint fourthEdge[] = {
+        0, 1, 5,
+        5, 4, 0
+    };
+    GLuint fifthEdge[] = {
+        1, 2, 6,
+        6, 5, 1
+    };
+    GLuint sixthEdge[] = {
+        0, 3, 7,
+        7, 4, 0
+    };
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glEnableClientState(GL_VERTEX_ARRAY);
+        glPushMatrix();
+            glColor3f(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, firstEdge);
+
+            glColor3f(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, secondEdge);
+
+            glColor3f(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, thirdEdge);
+
+            glColor3f(255 / 255.0f, 255 / 255.0f, 0 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fourthEdge);
+
+            glColor3f(255 / 255.0f, 171 / 255.0f, 255 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fifthEdge);
+
+            glColor3f(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, sixthEdge);
+        glPopMatrix();
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glEnable(GL_LIGHTING);
+}
+
+std::vector<int> MoveLight(int &xPos, int &yPos, int &zPos) {
+    if (xPos < 0) {
+        xPos = 0;
+    }
+    if (xPos > MAX_POS) {
+        xPos = MAX_POS;
+    }
+    if (yPos < 0) {
+        yPos = 0;
+    }
+    if (yPos > MAX_POS) {
+        yPos = MAX_POS;
+    }
+    if (zPos < 0) {
+        zPos = 0;
+    }
+    if (zPos > MAX_POS) {
+        zPos = MAX_POS;
+    }
+    glPushMatrix();
+        glTranslatef(xPos, yPos, zPos);
+        float lightPosition[] = { 0, 0, 1, 1 };
+        glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+        DrawLight();
+    glPopMatrix();
+    std::vector<int> coords;
+    coords.push_back(xPos);
+    coords.push_back(yPos);
+    coords.push_back(zPos);
+    return coords;
+};
+
 void DrawCube() {
     float vertices[] = {
     0.0f, 0.0f, 0.0f, //0
@@ -175,25 +269,27 @@ void DrawCube() {
         0, 3, 7,
         7, 4, 0
     };
-
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glEnableClientState(GL_VERTEX_ARRAY);
         glPushMatrix();
             glTranslatef(5.0f, 5.0f, 0);
             glScalef(5.0f, 5.0f, 5.0f);
 
+            glNormal3f(0, 0, 1);
             glColor3f(2/255.0f, 18/255.0f, 232/255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, firstEdge);
 
             glColor3f(13 / 255.0f, 231 / 255.0f, 247 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, secondEdge);
 
+            glNormal3f(1, 0, 0);
             glColor3f(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, thirdEdge);
 
             glColor3f(229 / 255.0f, 255 / 255.0f, 0 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fourthEdge);
 
+            glNormal3f(0, 1, 0);
             glColor3f(51 / 255.0f, 171 / 255.0f, 171 / 255.0f);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, fifthEdge);
 
@@ -206,6 +302,7 @@ void DrawCube() {
 int main(void) {
 
     int rho = 28, theta = 36, phi = 64;
+    int lightX = 0, lightY = 0, lightZ = 0;
 	std::vector<int> coords;
 
     glfwInit();
@@ -216,9 +313,16 @@ int main(void) {
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-1, 1, -1, 1, 1, 100);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
     
     //imgui initialization
     IMGUI_CHECKVERSION();
@@ -240,13 +344,14 @@ int main(void) {
         ImGui::NewFrame();
 
         glPushMatrix();
-            coords = MoveCamera(window, rho, theta, phi);
+            coords = MoveCamera(rho, theta, phi);
             DrawFloor();
             DrawAxises();
             DrawCube();
+            MoveLight(lightX, lightY, lightZ);
         glPopMatrix();
 
-        ImGui::Begin("Menu");
+        /*ImGui::Begin("Menu");
             ImGui::Text("rho");
             ImGui::InputInt("##rho", &rho);
             ImGui::Text("theta");
@@ -254,7 +359,17 @@ int main(void) {
             ImGui::Text("phi");
             ImGui::InputInt("##phi", &phi);
 			ImGui::Text("X: %d, Y: %d, Z: %d", coords[0], coords[1], coords[2]);
+        ImGui::End();*/
+
+        ImGui::Begin("Light");
+            ImGui::Text("xLight");
+            ImGui::InputInt("##xLight", &lightX);
+            ImGui::Text("yLight");
+            ImGui::InputInt("##yLight", &lightY);
+            ImGui::Text("zLight");
+            ImGui::InputInt("##zLight", &lightZ);
         ImGui::End();
+
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
